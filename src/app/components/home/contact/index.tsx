@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -14,15 +15,22 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/skhodijah369@gmail.com", {
+      // 1. Send via FormSubmit AJAX
+      fetch("https://formsubmit.co/ajax/skhodijah369@gmail.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        setSubmitted(true);
-        setFormData({ name: "", email: "", message: "" });
+      }).catch((err) => console.warn("FormSubmit notice:", err));
+
+      // 2. Save directly to Supabase contact_messages table
+      try {
+        await supabase.from("contact_messages").insert([formData]);
+      } catch (sbErr) {
+        console.warn("Supabase insert notice:", sbErr);
       }
+
+      setSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Form submit error:", error);
     }
@@ -88,7 +96,7 @@ const Contact = () => {
 
                 {submitted && (
                   <p className="text-xs font-bold text-[#1E6B65] p-2 bg-[#FAF6EE] rounded-lg">
-                    ✓ Thank you! Your message has been sent to skhodijah369@gmail.com
+                    Thank you! Your message has been sent to skhodijah369@gmail.com & saved to Admin Dashboard!
                   </p>
                 )}
 

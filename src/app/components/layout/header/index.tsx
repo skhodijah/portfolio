@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState("services");
+  const { profile } = usePortfolio();
 
   const navLinks = [
     { id: "services", label: "SERVICES", href: "#services" },
@@ -13,10 +15,15 @@ const Header = () => {
     { id: "beyond-tech", label: "BEYOND TECH", href: "#beyond-tech" },
   ];
 
+  // Format phone for tel: href (remove spaces & non-digits except +)
+  const phoneHref = profile.phone
+    ? `tel:${profile.phone.replace(/[^\d+]/g, "")}`
+    : "tel:+6285778918137";
+
   return (
     <header className="sticky top-0 z-50 bg-[#FAF6EE]/90 backdrop-blur-md py-4 border-b border-[#EAE5D9]/60 no-print">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        {/* Binjan-style Script Logo */}
+        {/* Script Logo */}
         <Link href="/" className="flex items-center gap-1.5">
           <span className="font-script text-3xl font-bold text-[#1B2430] tracking-wide">
             Hodi
@@ -24,7 +31,7 @@ const Header = () => {
           <span className="w-2 h-2 rounded-full bg-[#E75A3C] mt-2" />
         </Link>
 
-        {/* Middle Navigation with Pill Outline on Active Item */}
+        {/* Navigation */}
         <nav className="hidden md:flex items-center gap-4 text-xs font-bold tracking-wider text-[#1B2430]">
           {navLinks.map((link) => (
             <a
@@ -42,18 +49,18 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* Right Phone Contact Widget */}
+        {/* Right Phone Contact */}
         <div className="flex items-center gap-3">
           <a
-            href="tel:+6285778918137"
+            href={phoneHref}
             className="hidden sm:inline-block text-xs font-bold tracking-wide text-[#1B2430] hover:text-[#E75A3C] transition-colors"
           >
-            +62 857 7891 8137
+            {profile.phone || "+62 857 7891 8137"}
           </a>
           <a
-            href="tel:+6285778918137"
+            href={phoneHref}
             className="w-9 h-9 rounded-full bg-white border border-[#EAE5D9] shadow-xs flex items-center justify-center text-[#1B2430] hover:bg-[#1E6B65] hover:text-white hover:border-[#1E6B65] transition-all"
-            aria-label="Call Hodi"
+            aria-label={`Call ${profile.name || "Hodi"}`}
           >
             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
               <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.88.76a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.27 1.11l-2.37 2.4z" />

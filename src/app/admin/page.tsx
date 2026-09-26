@@ -41,7 +41,7 @@ CREATE POLICY "Public Read Images" ON storage.objects FOR SELECT USING (bucket_i
 CREATE POLICY "Public Update Images" ON storage.objects FOR UPDATE USING (bucket_id = 'portfolio-images');
 `;
 
-// ---- Reusable Image Upload Widget ----
+// ---- Reusable Single Image Upload Widget ----
 function ImageUploadBox({
   label,
   currentUrl,
@@ -70,7 +70,7 @@ function ImageUploadBox({
     if (url) {
       onUploaded(url);
     } else {
-      setError("Upload gagal. Pastikan bucket 'portfolio-images' sudah dibuat di Supabase Storage (lihat tab SQL Setup).");
+      setError("Upload gagal. Pastikan bucket 'portfolio-images' sudah dibuat di Supabase Storage.");
     }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";
@@ -80,7 +80,6 @@ function ImageUploadBox({
     <div className="space-y-3">
       <label className="block text-xs font-bold uppercase text-[#1B2430]">{label}</label>
 
-      {/* Preview */}
       {currentUrl ? (
         <div className="relative w-full h-44 rounded-2xl overflow-hidden border-2 border-[#1E6B65] bg-[#FAF6EE]">
           <Image src={currentUrl} alt="Preview" fill className="object-cover" unoptimized />
@@ -120,6 +119,106 @@ function ImageUploadBox({
         {uploading ? "Mengupload..." : currentUrl ? "Ganti Foto" : "Upload Foto"}
       </button>
 
+      {error && <p className="text-xs text-[#E75A3C] font-bold">{error}</p>}
+    </div>
+  );
+}
+
+// ---- Multi Image Upload Widget for Projects (Carousel Support) ----
+function MultiImageUploadBox({
+  label,
+  imageUrls = [],
+  onChange,
+}: {
+  label: string;
+  imageUrls: string[];
+  onChange: (urls: string[]) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setError("");
+    setUploading(true);
+
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError(`File ${file.name} terlalu besar (>5MB), dilewati.`);
+        continue;
+      }
+      const url = await uploadImageToSupabase(file, "projects");
+      if (url) {
+        uploadedUrls.push(url);
+      }
+    }
+
+    if (uploadedUrls.length > 0) {
+      onChange([...imageUrls, ...uploadedUrls]);
+    } else if (!error) {
+      setError("Gagal upload foto. Pastikan bucket 'portfolio-images' sudah aktif di Supabase.");
+    }
+
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    onChange(imageUrls.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex justify-between items-center">
+        <label className="block text-xs font-bold uppercase text-[#1B2430]">
+          {label} ({imageUrls.length} Foto)
+        </label>
+        <span className="text-[11px] text-[#556070] font-medium">Bisa upload banyak foto sekaligus untuk Carousel</span>
+      </div>
+
+      {/* Grid Previews */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {imageUrls.map((url, idx) => (
+          <div key={idx} className="relative aspect-[4/3] rounded-xl overflow-hidden border border-[#EAE5D9] bg-[#FAF6EE] group">
+            <Image src={url} alt={`Project ${idx + 1}`} fill className="object-cover" unoptimized />
+            <button
+              onClick={() => removeImage(idx)}
+              className="absolute top-1.5 right-1.5 bg-[#E75A3C] text-white text-[10px] font-bold px-2 py-0.5 rounded-full opacity-90 hover:opacity-100 cursor-pointer shadow-xs"
+            >
+              Hapus
+            </button>
+            <div className="absolute bottom-1 left-1.5 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+              #{idx + 1}
+            </div>
+          </div>
+        ))}
+
+        {/* Add Button Box */}
+        <div
+          onClick={() => inputRef.current?.click()}
+          className="aspect-[4/3] rounded-xl border-2 border-dashed border-[#EAE5D9] bg-[#FAF6EE] flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-[#1E6B65] hover:bg-white transition-all group"
+        >
+          <svg className="w-6 h-6 fill-[#556070] group-hover:fill-[#1E6B65] transition-colors" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          <span className="text-[11px] font-bold text-[#556070] group-hover:text-[#1E6B65]">+ Tambah Foto</span>
+        </div>
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleFilesChange}
+        className="hidden"
+      />
+
+      {uploading && <p className="text-xs text-[#1E6B65] font-bold animate-pulse">Sedang mengupload foto-foto...</p>}
       {error && <p className="text-xs text-[#E75A3C] font-bold">{error}</p>}
     </div>
   );
@@ -324,7 +423,6 @@ export default function AdminDashboard() {
         {/* TAB: PROFILE */}
         {activeTab === "profile" && (
           <div className="mt-8 space-y-6">
-            {/* FOTO PROFIL */}
             <div className="bg-white p-8 rounded-3xl border border-[#EAE5D9] shadow-sm">
               <h2 className="text-lg font-extrabold text-[#1B2430] mb-6">Foto Profil (Hero Section)</h2>
               <div className="max-w-sm">
@@ -337,7 +435,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* TEKS PROFIL */}
             <div className="bg-white p-8 rounded-3xl border border-[#EAE5D9] shadow-sm space-y-6">
               <h2 className="text-lg font-extrabold text-[#1B2430]">Informasi & Teks</h2>
 
@@ -413,7 +510,7 @@ export default function AdminDashboard() {
             <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-[#EAE5D9]">
               <h2 className="text-xl font-extrabold text-[#1B2430]">Proyek Portofolio</h2>
               <button
-                onClick={() => setProjects([...projects, { id: String(Date.now()), title: "Proyek Baru", subtitle: "Deskripsi singkat", bgColor: "bg-[#1E6B65] text-white", image: "/images/work/work-img-1.jpg", imageUrl: "", tags: ["Laravel", "PHP"], description: "Deskripsi proyek..." }])}
+                onClick={() => setProjects([...projects, { id: String(Date.now()), title: "Proyek Baru", subtitle: "Deskripsi singkat", bgColor: "bg-[#1E6B65] text-white", image: "/images/work/work-img-1.jpg", imageUrls: [], tags: ["Laravel", "PHP"], description: "Deskripsi proyek..." }])}
                 className="bg-[#1E6B65] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase cursor-pointer"
               >
                 + Tambah Proyek
@@ -430,14 +527,13 @@ export default function AdminDashboard() {
                     </button>
                   </div>
 
-                  {/* Upload gambar proyek */}
-                  <ImageUploadBox
-                    label="Gambar / Screenshot Proyek"
-                    currentUrl={proj.imageUrl || ""}
-                    folder="projects"
-                    onUploaded={(url) => {
+                  {/* Multi-Image Upload Widget */}
+                  <MultiImageUploadBox
+                    label="Galeri Foto Proyek (Carousel)"
+                    imageUrls={(proj as any).imageUrls || []}
+                    onChange={(urls) => {
                       const updated = [...projects];
-                      updated[idx] = { ...updated[idx], imageUrl: url };
+                      updated[idx] = { ...updated[idx], imageUrls: urls };
                       setProjects(updated);
                     }}
                   />

@@ -34,7 +34,7 @@ export const defaultPortfolioData = {
       subtitle: "Payroll & Attendance SaaS App",
       bgColor: "bg-[#F4B41A] text-[#1B2430]",
       image: "/images/work/work-img-1.jpg",
-      imageUrl: "",
+      imageUrls: [] as string[],
       tags: ["PHP", "Laravel", "MySQL", "Tailwind CSS", "System Analysis", "QA"],
       description: "SaaS-based payroll and attendance management system covering employee attendance, payroll, subscriptions, notifications, and HR processes."
     },
@@ -44,7 +44,7 @@ export const defaultPortfolioData = {
       subtitle: "Public Complaints Administration System",
       bgColor: "bg-[#1E6B65] text-white",
       image: "/images/work/work-img-2.jpg",
-      imageUrl: "",
+      imageUrls: [] as string[],
       tags: ["Laravel", "Zend Migration", "MySQL", "Blade", "QA Control"],
       description: "Web-based administration system for managing public complaints received by DPR RI, migrated from Zend framework to Laravel."
     },
@@ -54,7 +54,7 @@ export const defaultPortfolioData = {
       subtitle: "Beauty & Affiliate Campaigns",
       bgColor: "bg-[#E75A3C] text-white",
       image: "/images/work/work-img-3.jpg",
-      imageUrl: "",
+      imageUrls: [] as string[],
       tags: ["Scriptwriting", "CapCut", "TikTok Affiliate", "35+ Brands"],
       description: "Creative content strategy, product reviews, scriptwriting, video editing, and TikTok affiliate campaigns for 35+ top beauty brands."
     }

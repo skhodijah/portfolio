@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-warm: #FAF6EE;
+    --bg-card: #FFFFFF;
+    --text-main: #1B2430;
+    --text-muted: #556070;
+    --accent-teal: #1E6B65;
+    --accent-coral: #E75A3C;
+    --accent-yellow: #F4B41A;
+    --border-color: #EAE5D9;
+  }
+
+  body {
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+}
+
+.font-script {
+  font-family: var(--font-script), cursive;
+}
+
+/* Custom brush stroke shape behind hero portrait */
+.brush-stroke-teal {
+  background-color: #1E6B65;
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  transform: rotate(-8deg);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media print {
+  header, footer, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

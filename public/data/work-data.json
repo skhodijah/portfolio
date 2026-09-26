@@ -1,0 +1,51 @@
+{
+  "workData": [
+    {
+      "image": "/images/work/work-img-1.jpg",
+      "title": "HAGA Plus - Payroll & Attendance Management System",
+      "client": "SaaS Platform Project",
+      "slug": "haga-plus",
+      "category": "SaaS & Full Stack Web App",
+      "description": "SaaS-based payroll and attendance management system designed to manage employee attendance, payroll, subscriptions, and related HR processes.",
+      "tags": ["Laravel", "PHP", "MySQL", "Tailwind CSS", "System Analysis", "QA Testing"],
+      "contributions": [
+        "System Analysis & Business Process Analysis",
+        "Database Design & ERD System Modeling",
+        "Backend & CRUD Development (Attendance, Payroll, Subscriptions)",
+        "System Integration & Functional/Integration Testing",
+        "Bug Identification & Technical Documentation"
+      ]
+    },
+    {
+      "image": "/images/work/work-img-2.jpg",
+      "title": "Sistem Pengaduan DPR RI",
+      "client": "Sekretariat Jenderal DPR RI – Pustekinfo",
+      "slug": "sistem-pengaduan-dpr-ri",
+      "category": "Government System Migration & Development",
+      "description": "A web-based administration system for managing public complaints received by DPR RI, migrated from Zend framework to Laravel.",
+      "tags": ["Laravel", "Zend Migration", "MySQL", "DBeaver", "Blade", "QA Control"],
+      "contributions": [
+        "System migration from Zend to Laravel framework",
+        "Backend development and CRUD functionality",
+        "Database management with MySQL and DBeaver",
+        "Functional testing, integration testing, and quality control",
+        "Website & PARSA chatbot testing with technical documentation"
+      ]
+    },
+    {
+      "image": "/images/work/work-img-3.jpg",
+      "title": "Digital Content Creation & Beauty Campaigns",
+      "client": "35+ Major Beauty & Lifestyle Brands",
+      "slug": "content-creation",
+      "category": "Content Strategy & Affiliate Marketing",
+      "description": "Creative content creation focusing on beauty, makeup, skincare, product reviews, lifestyle, and TikTok affiliate campaigns.",
+      "tags": ["Content Planning", "Scriptwriting", "Video Editing", "Canva", "CapCut", "TikTok Affiliate"],
+      "contributions": [
+        "Concept development, scriptwriting, and content planning",
+        "Product review shooting and video editing (CapCut, Canva)",
+        "Social media strategy and affiliate campaign execution",
+        "Collaborated with brands like Avoskin, Somethinc, Wardah, SKINTIFIC, barenbliss"
+      ]
+    }
+  ]
+}

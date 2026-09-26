@@ -1,0 +1,129 @@
+{
+  "contactBar": {
+    "contactItems": [
+      {
+        "type": "location",
+        "label": "Meruya, West Jakarta",
+        "icon": "/images/icon/web-icon.svg",
+        "link": "#!"
+      },
+      {
+        "type": "phone",
+        "label": "+62 857 7891 8137",
+        "icon": "/images/icon/call-icon.svg",
+        "link": "tel:+6285778918137"
+      },
+      {
+        "type": "email",
+        "label": "skhodijah369@gmail.com",
+        "icon": "/images/icon/mail-icon.svg",
+        "link": "mailto:skhodijah369@gmail.com"
+      }
+    ],
+    "socialItems": [
+      {
+        "platform": "linkedin",
+        "label": "LinkedIn",
+        "icon": "/images/icon/linkedin-icon.svg",
+        "link": "https://linkedin.com"
+      },
+      {
+        "platform": "github",
+        "label": "GitHub",
+        "icon": "/images/icon/web-icon.svg",
+        "link": "https://github.com"
+      }
+    ]
+  },
+  "educationData": {
+    "education": [
+      {
+        "title": "Universitas Pamulang",
+        "degree": "Bachelor of Information Systems",
+        "period": "2022 – 2026",
+        "gpa": "CGPA: 3.78 / 4.00",
+        "description": "Graduated with honors in Information Systems, focusing on system analysis, database design, software engineering, and web development."
+      },
+      {
+        "title": "Universitas Pendidikan Ganesha",
+        "degree": "PMM 4 – Pertukaran Mahasiswa Merdeka",
+        "period": "2024",
+        "gpa": "CGPA: 3.95 / 4.00",
+        "description": "Student exchange program under Kampus Merdeka, achieving near-perfect academic performance across cross-disciplinary courses."
+      }
+    ],
+    "certifications": [
+      {
+        "title": "Programming Competency Certification",
+        "issuer": "BNSP",
+        "year": "2026"
+      },
+      {
+        "title": "Full Stack Developer Internship",
+        "issuer": "Sekretariat Jenderal DPR RI Pustekinfo",
+        "year": "2025"
+      }
+    ],
+    "skills": [
+      {
+        "name": "PHP & Laravel",
+        "icon": "/images/home/education-skill/adobe-icon.svg",
+        "rating": 5
+      },
+      {
+        "name": "MySQL & SQL",
+        "icon": "/images/home/education-skill/figma-icon.svg",
+        "rating": 5
+      },
+      {
+        "name": "System Analysis",
+        "icon": "/images/home/education-skill/sketch-icon.svg",
+        "rating": 5
+      },
+      {
+        "name": "Software QA & Testing",
+        "icon": "/images/home/education-skill/photoshop-icon.svg",
+        "rating": 5
+      },
+      {
+        "name": "Tailwind & Bootstrap",
+        "icon": "/images/home/education-skill/framer-icon.svg",
+        "rating": 5
+      },
+      {
+        "name": "Content & Video Editing",
+        "icon": "/images/home/education-skill/invision-icon.svg",
+        "rating": 5
+      }
+    ]
+  },
+  "contactLinks": {
+    "socialLinks": [
+      {
+        "title": "LinkedIn",
+        "href": "https://linkedin.com"
+      },
+      {
+        "title": "GitHub",
+        "href": "https://github.com"
+      }
+    ],
+    "contactInfo": [
+      {
+        "type": "email",
+        "label": "skhodijah369@gmail.com",
+        "link": "mailto:skhodijah369@gmail.com"
+      },
+      {
+        "type": "phone",
+        "label": "+62 857 7891 8137",
+        "link": "tel:+6285778918137"
+      },
+      {
+        "type": "location",
+        "label": "Meruya, West Jakarta",
+        "link": "#!"
+      }
+    ]
+  }
+}

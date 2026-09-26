@@ -16,7 +16,15 @@ function ProjectCarousel({
   title: string;
 }) {
   const [current, setCurrent] = useState(0);
-  const allImages = images.length > 0 ? images : [fallback];
+
+  // Filter out any empty strings or invalid values
+  const validImages = images.filter((img) => img && img.trim() !== "");
+
+  // Priority: 
+  // 1. Array of uploaded images in imageUrls
+  // 2. Fallback uploaded image (if valid URL)
+  // 3. Static local fallback image
+  const allImages = validImages.length > 0 ? validImages : [fallback];
   const total = allImages.length;
 
   const prev = (e: React.MouseEvent) => {
@@ -115,7 +123,12 @@ const LatestWork = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {projects.map((project, idx) => {
             const imageUrls: string[] = (project as any).imageUrls ?? [];
-            const fallback = getImgPath((project as any).image || "/images/work/work-img-1.jpg");
+            const singleImageUrl: string = (project as any).imageUrl || "";
+            
+            // Determine fallback: single imageUrl if uploaded, or static default image
+            const fallback = singleImageUrl.startsWith("http")
+              ? singleImageUrl
+              : getImgPath((project as any).image || "/images/work/work-img-1.jpg");
 
             return (
               <div

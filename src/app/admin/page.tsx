@@ -46,6 +46,7 @@ export default function AdminDashboard() {
   const [experiences, setExperiences] = useState(defaultPortfolioData.experiences);
   const [brandsText, setBrandsText] = useState(defaultPortfolioData.brands.join(", "));
   const [messages, setMessages] = useState<any[]>([]);
+  const [tableExists, setTableExists] = useState<boolean | null>(null);
 
   useEffect(() => {
     const authStatus = localStorage.getItem("hodi_admin_auth");
@@ -73,7 +74,10 @@ export default function AdminDashboard() {
     // 2. Fetch from Supabase
     try {
       const { data, error } = await supabase.from("portfolio_content").select("*").eq("id", "main").single();
-      if (data && data.data) {
+      if (error) {
+        setTableExists(false);
+      } else if (data && data.data) {
+        setTableExists(true);
         const content = data.data;
         if (content.profile) setProfile(content.profile);
         if (content.projects) setProjects(content.projects);
@@ -81,7 +85,7 @@ export default function AdminDashboard() {
         if (content.brands) setBrandsText(content.brands.join(", "));
       }
     } catch (err) {
-      console.warn("Supabase fetch notice: using current local state", err);
+      setTableExists(false);
     }
 
     // 3. Fetch Contact Messages from Supabase
@@ -111,6 +115,45 @@ export default function AdminDashboard() {
     localStorage.removeItem("hodi_admin_auth");
   };
 
+  const handleSeedSupabase = async () => {
+    setSaving(true);
+    const brandsArray = brandsText.split(",").map((b) => b.trim()).filter(Boolean);
+    const fullData = {
+      profile,
+      projects,
+      experiences,
+      brands: brandsArray,
+    };
+
+    try {
+      const { error } = await supabase.from("portfolio_content").upsert({
+        id: "main",
+        data: fullData,
+        updated_at: new Date().toISOString(),
+      });
+
+      if (error) {
+        setSaveStatus({
+          type: "error",
+          text: `Tabel belum ada di Supabase. Silakan jalankan Skrip SQL di tab "Supabase SQL Setup" terlebih dahulu di Supabase SQL Editor. Error: ${error.message}`,
+        });
+      } else {
+        setTableExists(true);
+        setSaveStatus({
+          type: "success",
+          text: "🎉 Berhasil melakukan Seed Data Awal ke Database Supabase!",
+        });
+      }
+    } catch (err: any) {
+      setSaveStatus({
+        type: "error",
+        text: "Error saat seeding: " + err.message,
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleSaveAll = async () => {
     setSaving(true);
     setSaveStatus(null);
@@ -138,7 +181,7 @@ export default function AdminDashboard() {
       if (error) {
         setSaveStatus({
           type: "success",
-          text: "Disimpan secara Lokal! (Untuk sync Supabase penuh, pastikan skrip SQL sudah dijalankan di Supabase Editor).",
+          text: "Disimpan secara Lokal! (Jalankan skrip SQL di Tab 'Supabase SQL Setup' di Supabase SQL Editor agar tersimpan ke cloud).",
         });
       } else {
         setSaveStatus({
@@ -210,7 +253,14 @@ export default function AdminDashboard() {
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-bold">
+          <div className="flex items-center gap-3 text-xs font-bold">
+            <button
+              onClick={handleSeedSupabase}
+              disabled={saving}
+              className="bg-[#1E6B65] text-white hover:opacity-90 transition-all px-4 py-2.5 rounded-full cursor-pointer shadow-xs disabled:opacity-50"
+            >
+              🌱 Push Data ke Supabase
+            </button>
             <button
               onClick={handleSaveAll}
               disabled={saving}
@@ -231,9 +281,15 @@ export default function AdminDashboard() {
       {/* Save Status Notification */}
       {saveStatus && (
         <div className="max-w-6xl mx-auto px-6 pt-6">
-          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex justify-between items-center">
+          <div
+            className={`p-4 rounded-2xl text-xs font-bold flex justify-between items-center ${
+              saveStatus.type === "error"
+                ? "bg-red-50 border border-red-200 text-red-800"
+                : "bg-emerald-50 border border-emerald-200 text-emerald-800"
+            }`}
+          >
             <span>{saveStatus.text}</span>
-            <button onClick={() => setSaveStatus(null)} className="text-emerald-800 font-bold">✕</button>
+            <button onClick={() => setSaveStatus(null)} className="font-bold">✕</button>
           </div>
         </div>
       )}
@@ -661,9 +717,10 @@ export default function AdminDashboard() {
         {activeTab === "sql" && (
           <div className="mt-8 bg-white p-8 rounded-3xl border border-[#EAE5D9] space-y-6">
             <div>
-              <h2 className="text-xl font-extrabold text-[#1B2430]">Skrip Konfigurasi Supabase Database</h2>
-              <p className="text-xs text-[#556070] mt-1">
-                Jalankan skrip SQL ini di **Supabase Dashboard → SQL Editor** jika ingin mengaktifkan tabel penyimpanan cloud secara penuh.
+              <h2 className="text-xl font-extrabold text-[#1B2430]">Cara Menyiapkan Tabel di Supabase (1 Menit)</h2>
+              <p className="text-sm text-[#556070] mt-1 leading-relaxed">
+                Database Supabase baru dibuat masih kosong (belum ada tabel `portfolio_content` & `contact_messages`).
+                Salin skrip SQL di bawah ini dan jalankan di **Supabase Dashboard → SQL Editor → Run**:
               </p>
             </div>
 
@@ -674,11 +731,11 @@ export default function AdminDashboard() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(SQL_SCHEMA_SCRIPT);
-                  alert("Skrip SQL berhasil disalin ke clipboard!");
+                  alert("Skrip SQL berhasil disalin ke clipboard! Buka SQL Editor di Supabase Dashboard lalu Paste dan Run.");
                 }}
-                className="absolute top-3 right-3 bg-[#1E6B65] text-white text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer"
+                className="absolute top-3 right-3 bg-[#1E6B65] text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer shadow-md hover:bg-[#E75A3C] transition-colors"
               >
-                Copy SQL Script
+                📋 Copy SQL Script
               </button>
             </div>
           </div>

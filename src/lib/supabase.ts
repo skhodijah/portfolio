@@ -12,7 +12,7 @@ export const defaultPortfolioData = {
     location: "Meruya, West Jakarta",
     phone: "+62 857 7891 8137",
     email: "skhodijah369@gmail.com",
-    headline: "Hey There, I’m Hodi",
+    headline: "Hey There, I'm Hodi",
     tagline: "I design, test, & document systems efficiently. And I love what I do.",
     heroQuote: "I build systems, test them, document them — and sometimes spend way too long editing TikToks.",
     aboutHeading: "Hi, I'm Hodi.",
@@ -22,7 +22,10 @@ export const defaultPortfolioData = {
     aboutParagraph4: "Outside technology, I work as a Content Creator, Content Writer, Content Planner, Speaker, and TikTok Affiliate, mainly creating beauty, makeup, skincare, and lifestyle content.",
     gpaUnpam: "3.78",
     gpaUndiksha: "3.95",
-    brandCount: "35+"
+    brandCount: "35+",
+    avatarUrl: "",
+    linkedinUrl: "https://linkedin.com",
+    githubUrl: "https://github.com",
   },
   projects: [
     {
@@ -31,6 +34,7 @@ export const defaultPortfolioData = {
       subtitle: "Payroll & Attendance SaaS App",
       bgColor: "bg-[#F4B41A] text-[#1B2430]",
       image: "/images/work/work-img-1.jpg",
+      imageUrl: "",
       tags: ["PHP", "Laravel", "MySQL", "Tailwind CSS", "System Analysis", "QA"],
       description: "SaaS-based payroll and attendance management system covering employee attendance, payroll, subscriptions, notifications, and HR processes."
     },
@@ -40,6 +44,7 @@ export const defaultPortfolioData = {
       subtitle: "Public Complaints Administration System",
       bgColor: "bg-[#1E6B65] text-white",
       image: "/images/work/work-img-2.jpg",
+      imageUrl: "",
       tags: ["Laravel", "Zend Migration", "MySQL", "Blade", "QA Control"],
       description: "Web-based administration system for managing public complaints received by DPR RI, migrated from Zend framework to Laravel."
     },
@@ -49,6 +54,7 @@ export const defaultPortfolioData = {
       subtitle: "Beauty & Affiliate Campaigns",
       bgColor: "bg-[#E75A3C] text-white",
       image: "/images/work/work-img-3.jpg",
+      imageUrl: "",
       tags: ["Scriptwriting", "CapCut", "TikTok Affiliate", "35+ Brands"],
       description: "Creative content strategy, product reviews, scriptwriting, video editing, and TikTok affiliate campaigns for 35+ top beauty brands."
     }
@@ -105,3 +111,27 @@ export const defaultPortfolioData = {
     "Cleora Beauty", "SKINTIFIC", "barenbliss", "SKIN1004"
   ]
 };
+
+// Helper: upload file to Supabase Storage, returns public URL or null
+export async function uploadImageToSupabase(
+  file: File,
+  folder: "avatars" | "projects"
+): Promise<string | null> {
+  const ext = file.name.split(".").pop();
+  const fileName = `${folder}/${Date.now()}.${ext}`;
+
+  const { error } = await supabase.storage
+    .from("portfolio-images")
+    .upload(fileName, file, { upsert: true, contentType: file.type });
+
+  if (error) {
+    console.error("Upload error:", error.message);
+    return null;
+  }
+
+  const { data } = supabase.storage
+    .from("portfolio-images")
+    .getPublicUrl(fileName);
+
+  return data?.publicUrl ?? null;
+}

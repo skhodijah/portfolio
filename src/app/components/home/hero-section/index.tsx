@@ -53,11 +53,12 @@ const HeroSection = () => {
             {/* Subject Profile Image */}
             <div className="relative z-10 w-[280px] h-[340px] sm:w-[320px] sm:h-[390px] rounded-2xl overflow-hidden shadow-xl border-4 border-white">
               <Image
-                src={getImgPath("/images/home/banner/banner-img.png")}
+                src={profile.avatarUrl || getImgPath("/images/home/banner/banner-img.png")}
                 alt={profile.name || "Hodi Khodijah"}
                 width={320}
                 height={390}
                 className="w-full h-full object-cover filter contrast-[1.03]"
+                unoptimized={!!profile.avatarUrl}
               />
             </div>
 

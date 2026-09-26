@@ -47,11 +47,12 @@ const LatestWork = () => {
               {/* Preview Image Card */}
               <div className="my-6 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/40 shadow-md relative z-10 bg-white">
                 <Image
-                  src={getImgPath(project.image || "/images/work/work-img-1.jpg")}
+                  src={project.imageUrl || getImgPath(project.image || "/images/work/work-img-1.jpg")}
                   alt={project.title}
                   width={400}
                   height={300}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  unoptimized={!!project.imageUrl}
                 />
               </div>
 

@@ -77,7 +77,7 @@ const HeroSection = () => {
                   </text>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center text-lg font-bold text-[#1E6B65]">
-                  HK
+
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@ const HeroSection = () => {
               {profile.tagline || "I design, test, & document systems efficiently. And I love what I do."}
             </p>
             <div className="text-xs font-semibold text-[#556070] italic">
-              Information Systems S1 ({profile.gpaUnpam || "3.78"} GPA) • BNSP Certified
+              Information Systems S1 ({profile.gpaUnpam || "3.78"} GPA) <br /> • BNSP Programmer Certified
             </div>
           </div>
 

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
+import { PortfolioProvider } from "@/context/PortfolioContext";
 
 const sansFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -31,9 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sansFont.variable} ${scriptFont.variable} scroll-smooth`}>
       <body className="bg-[#FAF6EE] text-[#1B2430] font-sans antialiased selection:bg-[#008080] selection:text-white">
-        <Header />
-        {children}
-        <Footer />
+        <PortfolioProvider>
+          <Header />
+          {children}
+          <Footer />
+        </PortfolioProvider>
       </body>
     </html>
   );

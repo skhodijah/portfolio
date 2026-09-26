@@ -1,11 +1,6 @@
-const brandList = [
-  "Avoskin", "Scarlett", "Sea Makeup", "Dörskin", "Amaterasun", "Bio Beauty Lab",
-  "Luxcrime", "Emina", "Pratista", "Somethinc", "Buy Me", "Glad2Glow", "Implora",
-  "The Originote", "BASE", "Dazzle Me", "O.TWO.O", "Glowies Beauty", "ELFORMULA",
-  "Reveline", "Brighty", "Pomeglow", "Finally Found You!", "Jiera", "Beauty of Joseon",
-  "Pigeon Teens", "Wardah", "Metoo", "Azarine", "Carasun", "Tavi", "Facetology",
-  "Cleora Beauty", "SKINTIFIC", "barenbliss", "SKIN1004"
-];
+"use client";
+
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const campaigns = [
   {
@@ -26,6 +21,8 @@ const campaigns = [
 ];
 
 const CreativeSection = () => {
+  const { brands } = usePortfolio();
+
   return (
     <section id="beyond-tech" className="py-20 bg-[#FAF6EE] border-b border-[#EAE5D9]">
       <div className="max-w-6xl mx-auto px-6">
@@ -65,19 +62,19 @@ const CreativeSection = () => {
         <div className="space-y-4 overflow-hidden">
           <div className="flex justify-between items-center text-xs font-bold text-[#556070] uppercase tracking-wider">
             <span>Partnered Beauty Brands</span>
-            <span>35+ Brands</span>
+            <span>{brands.length}+ Brands</span>
           </div>
 
           <div className="relative overflow-hidden py-4 border-y border-[#EAE5D9] bg-white rounded-xl shadow-xs">
             <div className="animate-marquee whitespace-nowrap text-sm font-bold text-[#1B2430] flex items-center gap-8">
-              {brandList.map((brand, idx) => (
+              {brands.map((brand, idx) => (
                 <span key={idx} className="flex items-center gap-8">
                   <span className="hover:text-[#E75A3C] transition-colors">{brand}</span>
                   <span className="text-[#E75A3C]">•</span>
                 </span>
               ))}
               {/* Duplicate for infinite loop */}
-              {brandList.map((brand, idx) => (
+              {brands.map((brand, idx) => (
                 <span key={`dup-${idx}`} className="flex items-center gap-8">
                   <span className="hover:text-[#E75A3C] transition-colors">{brand}</span>
                   <span className="text-[#E75A3C]">•</span>

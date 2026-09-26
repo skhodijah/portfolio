@@ -1,3 +1,7 @@
+"use client";
+
+import { usePortfolio } from "@/context/PortfolioContext";
+
 const serviceCards = [
   {
     icon: (
@@ -46,6 +50,8 @@ const serviceCards = [
 ];
 
 const WhatIDo = () => {
+  const { profile } = usePortfolio();
+
   return (
     <section id="services" className="py-20 bg-white border-b border-[#EAE5D9]">
       <div className="max-w-6xl mx-auto px-6">
@@ -96,15 +102,15 @@ const WhatIDo = () => {
             {/* Bottom Binjan-style Big Stats */}
             <div className="pt-6 border-t border-[#EAE5D9] grid grid-cols-3 gap-6">
               <div>
-                <h3 className="text-4xl font-extrabold text-[#1B2430]">3.78+</h3>
+                <h3 className="text-4xl font-extrabold text-[#1B2430]">{profile.gpaUnpam || "3.78"}+</h3>
                 <p className="text-xs font-bold text-[#556070] uppercase mt-1">S1 Systems GPA</p>
               </div>
               <div>
-                <h3 className="text-4xl font-extrabold text-[#1B2430]">3.95+</h3>
+                <h3 className="text-4xl font-extrabold text-[#1B2430]">{profile.gpaUndiksha || "3.95"}+</h3>
                 <p className="text-xs font-bold text-[#556070] uppercase mt-1">PMM 4 GPA</p>
               </div>
               <div>
-                <h3 className="text-4xl font-extrabold text-[#1B2430]">35+</h3>
+                <h3 className="text-4xl font-extrabold text-[#1B2430]">{profile.brandCount || "35+"}</h3>
                 <p className="text-xs font-bold text-[#556070] uppercase mt-1">Brand Campaigns</p>
               </div>
             </div>

@@ -1,7 +1,12 @@
+"use client";
+
 import { getImgPath } from "@/utils/image";
 import Image from "next/image";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const HeroSection = () => {
+  const { profile } = usePortfolio();
+
   return (
     <section className="relative bg-[#FAF6EE] pt-12 pb-20 overflow-hidden border-b border-[#EAE5D9]">
       <div className="max-w-6xl mx-auto px-6">
@@ -11,17 +16,16 @@ const HeroSection = () => {
           <div className="lg:col-span-5 space-y-8 z-10">
             <div>
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#1B2430] leading-[1.1] tracking-tight">
-                Hey There,<br />
-                I’m Hodi
+                {profile.headline || "Hey There, I’m Hodi"}
               </h1>
             </div>
 
             <div>
               <a
-                href="mailto:skhodijah369@gmail.com"
+                href={`mailto:${profile.email || "skhodijah369@gmail.com"}`}
                 className="inline-block font-bold text-sm text-[#E75A3C] border-b-2 border-[#E75A3C] hover:opacity-80 transition-opacity"
               >
-                skhodijah369@gmail.com
+                {profile.email || "skhodijah369@gmail.com"}
               </a>
             </div>
 
@@ -50,7 +54,7 @@ const HeroSection = () => {
             <div className="relative z-10 w-[280px] h-[340px] sm:w-[320px] sm:h-[390px] rounded-2xl overflow-hidden shadow-xl border-4 border-white">
               <Image
                 src={getImgPath("/images/home/banner/banner-img.png")}
-                alt="Hodi Khodijah"
+                alt={profile.name || "Hodi Khodijah"}
                 width={320}
                 height={390}
                 className="w-full h-full object-cover filter contrast-[1.03]"
@@ -68,12 +72,12 @@ const HeroSection = () => {
                   />
                   <text className="text-[9.5px] font-bold uppercase tracking-widest fill-[#1B2430]">
                     <textPath href="#circlePath">
-                      • HODI KHODIJAH • SYSTEM ANALYST & QA
+                      • {profile.name ? profile.name.toUpperCase() : "HODI KHODIJAH"} • SYSTEM ANALYST & QA
                     </textPath>
                   </text>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center text-lg font-bold text-[#1E6B65]">
-                  SK
+                  HK
                 </div>
               </div>
             </div>
@@ -82,10 +86,10 @@ const HeroSection = () => {
           {/* Right Column: Top Quote / Supporting Text */}
           <div className="lg:col-span-3 lg:text-right space-y-4">
             <p className="text-base sm:text-lg text-[#1B2430] font-medium leading-relaxed">
-              I design, test, & document systems efficiently. And I love what I do.
+              {profile.tagline || "I design, test, & document systems efficiently. And I love what I do."}
             </p>
             <div className="text-xs font-semibold text-[#556070] italic">
-              Information Systems S1 (3.78 GPA) • BNSP Certified
+              Information Systems S1 ({profile.gpaUnpam || "3.78"} GPA) • BNSP Certified
             </div>
           </div>
 
